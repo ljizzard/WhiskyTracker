@@ -29,4 +29,10 @@ public class WhiskyTrackerApplicationTests {
 		assertEquals(1, result.size());
 	}
 
+	@Test
+	public void canGetWhiskiesByRegion(){
+		List<Whisky> result = whiskyRepository.getDistilleriesByRegion("Speyside");
+		assertEquals(2, result.size());
+	}
+
 }
