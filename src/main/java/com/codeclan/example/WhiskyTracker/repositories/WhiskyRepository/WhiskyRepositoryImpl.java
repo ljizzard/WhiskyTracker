@@ -1,10 +1,13 @@
 package com.codeclan.example.WhiskyTracker.repositories.WhiskyRepository;
 
 
+import com.codeclan.example.WhiskyTracker.models.Distillery;
 import com.codeclan.example.WhiskyTracker.models.Whisky;
 import com.codeclan.example.WhiskyTracker.repositories.DistilleryRepository.DistilleryRepository;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
@@ -29,5 +32,23 @@ public class WhiskyRepositoryImpl implements WhiskyRepositoryCustom {
         result = cr.list();
         return result;
 
+    }
+
+    @Transactional
+    public List<Whisky> getWhiskiesByDistillaryIdAndAge(Long id, int age){
+        List<Whisky> result = null;
+
+        Distillery distillery = distilleryRepository.getOne(id);
+
+        Session session = entityManager.unwrap(Session.class);
+        Criteria cr1 = session.createCriteria(Whisky.class);
+
+
+        Criterion item1 = Restrictions.eq("age", age);
+        Criterion item2 = Restrictions.eq("distillery", distillery);
+        cr1.add(Restrictions.and(item1, item2));
+
+        result = cr1.list();
+        return result;
     }
 }
